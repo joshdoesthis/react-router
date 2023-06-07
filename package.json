@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "description": "A simple router for React apps with URL Pattern Polyfill",
   "main": "index.js",
-  "repository": "https://github.com/joshdoesthis/react-router",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/joshdoesthis/react-router.git"
+  },
   "author": "Joshua Wilson",
   "license": "MIT",
   "dependencies": {
