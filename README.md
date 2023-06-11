@@ -5,13 +5,13 @@
 Using [npm](https://www.npmjs.com/):
 
 ```sh
-$ npm i react-router
+$ npm i @joshdoesthis/react-router
 ```
 
 Using [yarn](https://yarnpkg.com/):
 
 ```sh
-$ yarn add react-router
+$ yarn add @joshdoesthis/react-router
 ```
 
 ## Usage
