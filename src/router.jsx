@@ -89,13 +89,18 @@ export const Route = ({
   const has_match = url_pattern.test({ pathname: current_pathname })
 
   useEffect(() => {
-    if (auth && !isAuthenticated()) {
+    if (
+      auth &&
+      !isAuthenticated &&
+      has_match &&
+      current_pathname !== authRedirect
+    ) {
       update_route({ pathname: authRedirect, search: '' })
     }
     if (notFound && !route.has_match) {
       update_route({ pathname: notFoundRedirect, search: '' })
     }
-  }, [])
+  }, [route])
 
   if (notFound) return null
   if (has_match) {
