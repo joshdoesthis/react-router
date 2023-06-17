@@ -100,7 +100,7 @@ export const Route = ({
     if (notFound && !route.has_match) {
       update_route({ pathname: notFoundRedirect, search: '' })
     }
-  }, [route])
+  }, [route, isAuthenticated])
 
   if (notFound) return null
   if (has_match) {
