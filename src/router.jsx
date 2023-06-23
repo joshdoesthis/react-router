@@ -86,7 +86,7 @@ export const Route = ({
   useEffect(() => {
     if (
       auth &&
-      !isAuthenticated &&
+      !isAuthenticated() &&
       has_match &&
       current_pathname !== authRedirect
     ) {
@@ -95,7 +95,7 @@ export const Route = ({
     if (notFound && !route.has_match) {
       navigate({ pathname: notFoundRedirect, search: '' })
     }
-  }, [route, isAuthenticated])
+  }, [route])
 
   if (notFound) return null
   if (has_match) {
