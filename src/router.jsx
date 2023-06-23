@@ -17,7 +17,7 @@ export const Router = ({
     has_match: false,
     params: {}
   })
-  const update_route = ({ pathname, search = '', has_match, params }) => {
+  const navigate = ({ pathname, search = '', has_match, params }) => {
     window.history.pushState(
       {
         previous: {
@@ -62,7 +62,7 @@ export const Router = ({
         authRedirect,
         notFoundRedirect,
         route,
-        update_route
+        navigate
       }}
     >
       {children}
@@ -76,13 +76,8 @@ export const Route = ({
   path,
   component: Component
 }) => {
-  const {
-    isAuthenticated,
-    authRedirect,
-    notFoundRedirect,
-    route,
-    update_route
-  } = useRouter()
+  const { isAuthenticated, authRedirect, notFoundRedirect, route, navigate } =
+    useRouter()
   const current_pathname = route.pathname
   const current_search = route.search
   const url_pattern = new URLPattern({ pathname: path })
@@ -95,10 +90,10 @@ export const Route = ({
       has_match &&
       current_pathname !== authRedirect
     ) {
-      update_route({ pathname: authRedirect, search: '' })
+      navigate({ pathname: authRedirect, search: '' })
     }
     if (notFound && !route.has_match) {
-      update_route({ pathname: notFoundRedirect, search: '' })
+      navigate({ pathname: notFoundRedirect, search: '' })
     }
   }, [route, isAuthenticated])
 
@@ -124,7 +119,7 @@ export const Route = ({
 }
 
 export const Link = ({ children, ext = false, url, target = '_self', tw }) => {
-  const { route, update_route } = useRouter()
+  const { route, navigate } = useRouter()
   const [pathname, search] = url.split('?')
   const active = route.pathname.includes(url)
   return (
@@ -133,7 +128,7 @@ export const Link = ({ children, ext = false, url, target = '_self', tw }) => {
       onClick={e => {
         if (!ext) {
           e.preventDefault()
-          update_route({ pathname, search: search ? `?${search}` : '' })
+          navigate({ pathname, search: search ? `?${search}` : '' })
         }
       }}
       target={target}
