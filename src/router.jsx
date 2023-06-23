@@ -17,7 +17,8 @@ export const Router = ({
     has_match: false,
     params: {}
   })
-  const navigate = ({ pathname, search = '', has_match, params }) => {
+  const navigate = (url, { pathname, search = '', has_match, params } = {}) => {
+    if (url) pathname = url
     window.history.pushState(
       {
         previous: {
@@ -90,10 +91,10 @@ export const Route = ({
       has_match &&
       current_pathname !== authRedirect
     ) {
-      navigate({ pathname: authRedirect, search: '' })
+      navigate(null, { pathname: authRedirect, search: '' })
     }
     if (notFound && !route.has_match) {
-      navigate({ pathname: notFoundRedirect, search: '' })
+      navigate(null, { pathname: notFoundRedirect, search: '' })
     }
   }, [route])
 
@@ -128,7 +129,7 @@ export const Link = ({ children, ext = false, url, target = '_self', tw }) => {
       onClick={e => {
         if (!ext) {
           e.preventDefault()
-          navigate({ pathname, search: search ? `?${search}` : '' })
+          navigate(null, { pathname, search: search ? `?${search}` : '' })
         }
       }}
       target={target}
