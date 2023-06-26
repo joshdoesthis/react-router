@@ -1,6 +1,6 @@
 {
   "name": "@joshdoesthis/react-router",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "A simple router for React apps with URL Pattern Polyfill",
   "main": "index.js",
   "repository": {
@@ -11,6 +11,6 @@
   "license": "MIT",
   "dependencies": {
     "react": "^18.2.0",
-    "urlpattern-polyfill": "^8.0.2"
+    "urlpattern-polyfill": "^9.0.0"
   }
 }
