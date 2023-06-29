@@ -2,7 +2,6 @@ import React, { createContext, useContext, useState, useEffect } from 'react'
 import { URLPattern } from 'urlpattern-polyfill'
 
 const RouterContext = createContext()
-
 export const useRouter = () => useContext(RouterContext)
 
 export const Router = ({
@@ -87,7 +86,7 @@ export const Route = ({
   useEffect(() => {
     if (
       auth &&
-      !isAuthenticated() &&
+      !isAuthenticated &&
       has_match &&
       current_pathname !== authRedirect
     ) {

@@ -61,9 +61,6 @@ const Home = () => {
       <h1>Home</h1>
       <Link url='/page/1'>Page 1</Link>
       <Link url='/page/2'>Page 2</Link>
-      <Link ext url='https://www.npmjs.com'>
-        NPM
-      </Link>
     </div>
   )
 }
@@ -81,8 +78,9 @@ const NotFound = () => {
 }
 
 const App = () => {
-  // Provide a synchronous function that returns a boolean
-  // indicating whether the user is authenticated or not.
+  // Provide the router with the authentication state
+  // so that it can redirect to the login page if the
+  // user is not authenticated.
   const { is_authenticated } = useAuth()
 
   return (
