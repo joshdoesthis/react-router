@@ -16,7 +16,9 @@ $ yarn add @joshdoesthis/react-router
 
 ## Usage
 
-```js
+### Basic Routes
+
+```jsx
 import { Router, Route, Link } from '@joshdoesthis/react-router'
 
 const Home = () => {
@@ -49,9 +51,9 @@ const App = () => {
 }
 ```
 
-## Authenticated Routes
+### Authenticated Routes
 
-```js
+```jsx
 import { Router, Route, Link } from '@joshdoesthis/react-router'
 import { Auth, useAuth } from '../provider/auth'
 
@@ -78,13 +80,10 @@ const NotFound = () => {
 }
 
 const App = () => {
-  // Provide the router with the authentication state
-  // so that it can redirect to the login page if the
-  // user is not authenticated.
-  const { is_authenticated } = useAuth()
+  const { authenticated } = useAuth()
 
   return (
-    <Router isAuthenticated={is_authenticated}>
+    <Router authenticated={authenticated}>
       <Route path='/' component={Home} />
       <Route auth path='/page/:page_id' component={Page} />
       <Route path='/login' component={Login} />
@@ -102,3 +101,28 @@ const AuthenticatedApp = () => {
   )
 }
 ```
+
+## Router props
+
+| Prop             | Type      | Description                                                                     |
+| ---------------- | --------- | ------------------------------------------------------------------------------- |
+| authenticated    | `boolean` | Whether or not the user is authenticated. Defaults to `false`.                  |
+| authRedirect     | `string`  | The path to redirect to if the user is not authenticated. Defaults to `/login`. |
+| notFoundRedirect | `string`  | The path to redirect to if the route is not found. Defaults to `/404`.          |
+
+## Route props
+
+| Prop      | Type       | Description                                                            |
+| --------- | ---------- | ---------------------------------------------------------------------- |
+| auth      | `boolean`  | Whether or not the route requires authentication. Defaults to `false`. |
+| notFound  | `boolean`  | Whether or not the route is the not found route. Defaults to `false`.  |
+| path      | `string`   | The path to match.                                                     |
+| component | `function` | The component to render.                                               |
+
+## Link props
+
+| Prop   | Type      | Description                                               |
+| ------ | --------- | --------------------------------------------------------- |
+| url    | `string`  | The path to link to.                                      |
+| ext    | `boolean` | Whether or not the link is external. Defaults to `false`. |
+| target | `string`  | The target of the link. Defaults to `_self`.              |
