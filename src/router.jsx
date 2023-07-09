@@ -118,22 +118,21 @@ export const Route = ({
   return null
 }
 
-export const Link = ({ children, ext = false, url, target = '_self', tw }) => {
+export const Link = ({ children, url, ext = false, target = '_self' }) => {
   const { route, navigate } = useRouter()
   const [pathname, search] = url.split('?')
   const active = route.pathname.includes(url)
   return (
     <a
       href={url}
+      target={target}
+      data-active={active}
       onClick={e => {
         if (!ext) {
           e.preventDefault()
           navigate(null, { pathname, search: search ? `?${search}` : '' })
         }
       }}
-      target={target}
-      data-active={active}
-      className={tw}
     >
       {children}
     </a>
