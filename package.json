@@ -1,7 +1,12 @@
 {
   "name": "@joshdoesthis/react-router",
-  "version": "1.0.14",
-  "description": "A simple router for React apps with URL Pattern Polyfill",
+  "version": "1.0.15",
+  "description": "A simple router for React apps.",
+  "keywords": [
+    "react",
+    "router",
+    "urlpattern"
+  ],
   "main": "index.js",
   "repository": {
     "type": "git",
