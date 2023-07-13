@@ -1,5 +1,7 @@
 # React Router
 
+A simple router for React apps.
+
 ## Installation
 
 Using [npm](https://www.npmjs.com/):
@@ -102,7 +104,7 @@ const AuthenticatedApp = () => {
 }
 ```
 
-## Router props
+## Router
 
 | Prop             | Type      | Description                                                                     |
 | ---------------- | --------- | ------------------------------------------------------------------------------- |
@@ -110,7 +112,7 @@ const AuthenticatedApp = () => {
 | authRedirect     | `string`  | The path to redirect to if the user is not authenticated. Defaults to `/login`. |
 | notFoundRedirect | `string`  | The path to redirect to if the route is not found. Defaults to `/404`.          |
 
-## Route props
+## Route
 
 | Prop      | Type       | Description                                                            |
 | --------- | ---------- | ---------------------------------------------------------------------- |
@@ -119,7 +121,7 @@ const AuthenticatedApp = () => {
 | path      | `string`   | The path to match.                                                     |
 | component | `function` | The component to render.                                               |
 
-## Link props
+## Link
 
 | Prop   | Type      | Description                                               |
 | ------ | --------- | --------------------------------------------------------- |
