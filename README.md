@@ -106,25 +106,26 @@ const AuthenticatedApp = () => {
 
 ## Router
 
-| Prop             | Type      | Description                                                                     |
-| ---------------- | --------- | ------------------------------------------------------------------------------- |
-| authenticated    | `boolean` | Whether or not the user is authenticated. Defaults to `false`.                  |
-| authRedirect     | `string`  | The path to redirect to if the user is not authenticated. Defaults to `/login`. |
-| notFoundRedirect | `string`  | The path to redirect to if the route is not found. Defaults to `/404`.          |
+| Prop               | Type      | Description                                                                     |
+| ------------------ | --------- | ------------------------------------------------------------------------------- |
+| `authenticated`    | `boolean` | Whether or not the user is authenticated. Defaults to `false`.                  |
+| `authRedirect`     | `string`  | The path to redirect to if the user is not authenticated. Defaults to `/login`. |
+| `notFoundRedirect` | `string`  | The path to redirect to if the route is not found. Defaults to `/404`.          |
 
 ## Route
 
-| Prop      | Type       | Description                                                            |
-| --------- | ---------- | ---------------------------------------------------------------------- |
-| auth      | `boolean`  | Whether or not the route requires authentication. Defaults to `false`. |
-| notFound  | `boolean`  | Whether or not the route is the not found route. Defaults to `false`.  |
-| path      | `string`   | The path to match.                                                     |
-| component | `function` | The component to render.                                               |
+| Prop        | Type       | Description                                                            |
+| ----------- | ---------- | ---------------------------------------------------------------------- |
+| `auth`      | `boolean`  | Whether or not the route requires authentication. Defaults to `false`. |
+| `notFound`  | `boolean`  | Whether or not the route is the not found route. Defaults to `false`.  |
+| `path`      | `string`   | The path to match.                                                     |
+| `component` | `function` | The component to render.                                               |
 
 ## Link
 
-| Prop   | Type      | Description                                               |
-| ------ | --------- | --------------------------------------------------------- |
-| url    | `string`  | The path to link to.                                      |
-| ext    | `boolean` | Whether or not the link is external. Defaults to `false`. |
-| target | `string`  | The target of the link. Defaults to `_self`.              |
+| Prop     | Type      | Description                                               |
+| -------- | --------- | --------------------------------------------------------- |
+| `url`    | `string`  | The path to link to.                                      |
+| `ext`    | `boolean` | Whether or not the link is external. Defaults to `false`. |
+| `target` | `string`  | The target of the link. Defaults to `_self`.              |
+| `style`  | `object`  | The style of the link.                                    |

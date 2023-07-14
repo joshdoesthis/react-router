@@ -113,7 +113,13 @@ export const Route = ({
   return null
 }
 
-export const Link = ({ children, url, ext = false, target = '_self' }) => {
+export const Link = ({
+  children,
+  ext = false,
+  url = '/',
+  target = '_self',
+  style = ''
+}) => {
   const { route, navigate } = useRouter()
   const [pathname, search] = url.split('?')
   const active = route.pathname.includes(url)
@@ -121,6 +127,7 @@ export const Link = ({ children, url, ext = false, target = '_self' }) => {
     <a
       href={url}
       target={target}
+      style={style}
       data-active={active}
       onClick={e => {
         if (!ext) {
