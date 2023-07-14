@@ -127,7 +127,7 @@ export const Link = ({
     <a
       href={url}
       target={target}
-      style={style}
+      className={style}
       data-active={active}
       onClick={e => {
         if (!ext) {
