@@ -21,31 +21,44 @@ $ yarn add @joshdoesthis/react-router
 ### Basic Routes
 
 ```jsx
-import { Router, Route, Link } from '@joshdoesthis/react-router'
+import { Router, Route, Link, useRouter } from '@joshdoesthis/react-router'
 
 const Home = () => {
+  const router = useRouter()
+
   return (
     <div>
       <h1>Home</h1>
-      <Link url='/page/1'>Page 1</Link>
-      <Link url='/page/2'>Page 2</Link>
+      <Link path='/page/1'>Page 1</Link>
+      <Link path='/page/2'>Page 2</Link>
+      <button onClick={() => router.navigate('/page/3')}>Page 3</button>
     </div>
   )
 }
 
-const Page = ({ route: { params } }) => {
-  return <h1>Page: {params.page_id}</h1>
+const Page = () => {
+  const router = useRouter()
+  const { params } = router.state
+
+  return <h1>Page: {params.pageId}</h1>
 }
 
 const NotFound = () => {
-  return <h1>Not Found</h1>
+  const router = useRouter()
+
+  return (
+    <div>
+      <h1>Not Found</h1>
+      <button onClick={() => router.back()}>Go Back</button>
+    </div>
+  )
 }
 
 const App = () => {
   return (
     <Router>
       <Route path='/' component={Home} />
-      <Route path='/page/:page_id' component={Page} />
+      <Route path='/page/:pageId' component={Page} />
       <Route path='/404' component={NotFound} />
     </Router>
   )
@@ -55,21 +68,27 @@ const App = () => {
 ### Authenticated Routes
 
 ```jsx
-import { Router, Route, Link } from '@joshdoesthis/react-router'
+import { Router, Route, Link, useRouter } from '@joshdoesthis/react-router'
 import { Auth, useAuth } from '../provider/auth'
 
 const Home = () => {
+  const router = useRouter()
+
   return (
     <div>
       <h1>Home</h1>
-      <Link url='/page/1'>Page 1</Link>
-      <Link url='/page/2'>Page 2</Link>
+      <Link path='/page/1'>Page 1</Link>
+      <Link path='/page/2'>Page 2</Link>
+      <button onClick={() => router.navigate('/page/3')}>Page 3</button>
     </div>
   )
 }
 
-const Page = ({ route: { params } }) => {
-  return <h1>Page: {params.page_id}</h1>
+const Page = () => {
+  const router = useRouter()
+  const { params } = router.state
+
+  return <h1>Page: {params.pageId}</h1>
 }
 
 const Login = () => {
@@ -77,7 +96,14 @@ const Login = () => {
 }
 
 const NotFound = () => {
-  return <h1>Not Found</h1>
+  const router = useRouter()
+
+  return (
+    <div>
+      <h1>Not Found</h1>
+      <button onClick={() => router.back()}>Go Back</button>
+    </div>
+  )
 }
 
 const App = () => {
@@ -86,10 +112,9 @@ const App = () => {
   return (
     <Router authenticated={auth.state.authenticated}>
       <Route path='/' component={Home} />
-      <Route auth path='/page/:page_id' component={Page} />
+      <Route auth path='/page/:pageId' component={Page} />
       <Route path='/login' component={Login} />
       <Route path='/404' component={NotFound} />
-      <Route notFound />
     </Router>
   )
 }
@@ -128,3 +153,11 @@ const AuthenticatedApp = () => {
 | `ext`    | `boolean` | Whether or not the link is external. Defaults to `false`. |
 | `target` | `string`  | The target of the link. Defaults to `_self`.              |
 | `style`  | `object`  | The style of the link.                                    |
+
+## useRouter
+
+| Prop       | Type                     | Description                          |
+| ---------- | ------------------------ | ------------------------------------ |
+| `state`    | `object`                 | The current state of the router.     |
+| `navigate` | `(path: string) => void` | Navigates to the specified path.     |
+| `back`     | `() => void`             | Navigates back to the previous path. |

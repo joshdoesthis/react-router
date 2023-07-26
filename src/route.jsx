@@ -13,7 +13,7 @@ export const Route = ({ auth = false, path, component: Component }) => {
   }, [])
 
   if (path && router.state.current === path) {
-    return <Component route={router.state.current} />
+    return <Component />
   }
 
   return null

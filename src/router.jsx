@@ -70,21 +70,29 @@ export const Router = ({
     route()
   }
 
+  const back = () => {
+    window.history.back()
+    route()
+  }
+
   useEffect(() => {
     route()
   }, [state.routes, authenticated])
 
+  useEffect(() => {
+    window.addEventListener('popstate', route)
+    return () => window.removeEventListener('popstate', route)
+  }, [state.routes])
+
   return (
     <RouterContext.Provider
       value={{
-        authenticated,
-        authRedirect,
-        notFoundRedirect,
         subscribe,
         unsubscribe,
         set,
         get,
-        navigate
+        navigate,
+        back
       }}
     >
       {children}
@@ -93,16 +101,8 @@ export const Router = ({
 }
 
 export const useRouter = () => {
-  const {
-    subscribe,
-    unsubscribe,
-    set,
-    get,
-    authenticated,
-    authRedirect,
-    notFoundRedirect,
-    navigate
-  } = useContext(RouterContext)
+  const { subscribe, unsubscribe, set, get, navigate, back } =
+    useContext(RouterContext)
   const [state, setState] = useState(get())
 
   useEffect(() => {
@@ -111,11 +111,9 @@ export const useRouter = () => {
   }, [])
 
   return {
-    authenticated,
-    authRedirect,
-    notFoundRedirect,
     state,
     set,
-    navigate
+    navigate,
+    back
   }
 }
