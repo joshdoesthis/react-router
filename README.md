@@ -47,7 +47,6 @@ const App = () => {
       <Route path='/' component={Home} />
       <Route path='/page/:page_id' component={Page} />
       <Route path='/404' component={NotFound} />
-      <Route notFound />
     </Router>
   )
 }
@@ -82,10 +81,10 @@ const NotFound = () => {
 }
 
 const App = () => {
-  const { authenticated } = useAuth()
+  const auth = useAuth()
 
   return (
-    <Router authenticated={authenticated}>
+    <Router authenticated={auth.state.authenticated}>
       <Route path='/' component={Home} />
       <Route auth path='/page/:page_id' component={Page} />
       <Route path='/login' component={Login} />
@@ -125,7 +124,7 @@ const AuthenticatedApp = () => {
 
 | Prop     | Type      | Description                                               |
 | -------- | --------- | --------------------------------------------------------- |
-| `url`    | `string`  | The path to link to.                                      |
+| `path`   | `string`  | The path to link to.                                      |
 | `ext`    | `boolean` | Whether or not the link is external. Defaults to `false`. |
 | `target` | `string`  | The target of the link. Defaults to `_self`.              |
 | `style`  | `object`  | The style of the link.                                    |

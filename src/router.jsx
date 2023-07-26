@@ -26,9 +26,9 @@ export const Router = ({
     setListeners(listeners => listeners.filter(listener => listener.id !== id))
   }
 
-  const set = fn => {
-    if (typeof fn === 'function') setState(state => fn(state))
-    else setState(state => ({ ...state, ...fn }))
+  const set = newState => {
+    if (typeof newState === 'function') setState(state => newState(state))
+    else setState(state => ({ ...state, ...newState }))
   }
 
   const get = () => state
@@ -94,22 +94,19 @@ export const Router = ({
 
 export const useRouter = () => {
   const {
-    authenticated,
-    authRedirect,
-    notFoundRedirect,
     subscribe,
     unsubscribe,
     set,
     get,
-
+    authenticated,
+    authRedirect,
+    notFoundRedirect,
     navigate
   } = useContext(RouterContext)
   const [state, setState] = useState(get())
 
-  const globalSetState = globalState => setState(globalState)
-
   useEffect(() => {
-    const id = subscribe(globalSetState)
+    const id = subscribe(state => setState(state))
     return () => unsubscribe(id)
   }, [])
 
