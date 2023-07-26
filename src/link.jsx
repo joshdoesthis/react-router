@@ -1,4 +1,5 @@
-import React, { useRouter } from './router'
+import React from 'react'
+import { useRouter } from './router'
 
 export const Link = ({
   children,
