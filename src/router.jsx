@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react'
 import { URLPattern } from 'urlpattern-polyfill'
+import { v4 as uuidv4 } from 'uuid'
 
 const RouterContext = createContext({})
 
@@ -13,11 +14,9 @@ export const Router = ({
     routes: []
   })
   const [listeners, setListeners] = useState([])
-  const [id, setId] = useState(0)
 
   const subscribe = listener => {
-    const newId = id + 1
-    setId(newId)
+    const newId = uuidv4()
     setListeners(listeners => [...listeners, { id: newId, listener }])
     return newId
   }
