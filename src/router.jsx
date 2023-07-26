@@ -1,59 +1,78 @@
-import React, { createContext, useContext, useState, useEffect } from 'react'
+import { createContext, useContext, useState, useEffect } from 'react'
 import { URLPattern } from 'urlpattern-polyfill'
 
-const RouterContext = createContext()
-export const useRouter = () => useContext(RouterContext)
+const RouterContext = createContext({})
 
 export const Router = ({
   children,
+  authenticated = false,
   authRedirect = '/login',
-  notFoundRedirect = '/404',
-  authenticated = false
+  notFoundRedirect = '/404'
 }) => {
-  const [route, setRoute] = useState({
-    pathname: window.location.pathname,
-    search: window.location.search,
-    match: false,
-    params: {}
+  const [state, setState] = useState({
+    routes: []
   })
-  const navigate = (url, { pathname, search = '', match, params } = {}) => {
-    if (url) pathname = url
-    window.history.pushState(
-      {
-        previous: {
-          pathname: route.pathname,
-          search: route.search,
-          match: route.match,
-          params: route.params
-        },
-        current: {
-          pathname: pathname,
-          search: search,
-          match: match,
-          params: params
-        }
-      },
-      null,
-      pathname + search
-    )
-    setRoute({
-      pathname: pathname,
-      search: search,
-      match: match,
-      params: params
+  const [listeners, setListeners] = useState([])
+  const [id, setId] = useState(0)
+
+  const subscribe = listener => {
+    const newId = id + 1
+    setId(newId)
+    setListeners(listeners => [...listeners, { id: newId, listener }])
+    return newId
+  }
+
+  const unsubscribe = id => {
+    setListeners(listeners => listeners.filter(listener => listener.id !== id))
+  }
+
+  const set = fn => {
+    if (typeof fn === 'function') setState(state => fn(state))
+    else setState(state => ({ ...state, ...fn }))
+  }
+
+  const get = () => state
+
+  useEffect(() => listeners.forEach(({ listener }) => listener(state)), [state])
+
+  const route = () => {
+    if (state.routes.length === 0) return
+    const match = state.routes.find(({ path }) => {
+      const pattern = new URLPattern({ pathname: path })
+      return pattern.test({ pathname: window.location.pathname })
     })
+    if (match && match.auth && !authenticated) {
+      window.history.pushState(null, null, authRedirect)
+      set({ current: authRedirect, href: window.location.href, params: {} })
+      return
+    }
+    if (match) {
+      const pattern = new URLPattern({ pathname: match.path })
+      const pathParams = pattern.exec({
+        pathname: window.location.pathname
+      }).pathname.groups
+      const searchParams = Object.fromEntries(
+        new URLSearchParams(window.location.search).entries()
+      )
+      set({
+        current: match.path,
+        href: window.location.href,
+        params: { ...pathParams, ...searchParams }
+      })
+      return
+    }
+    window.history.pushState(null, null, notFoundRedirect)
+    set({ current: notFoundRedirect, href: window.location.href, params: {} })
+  }
+
+  const navigate = path => {
+    window.history.pushState(null, null, path)
+    route()
   }
 
   useEffect(() => {
-    window.addEventListener('popstate', e => {
-      const { current } = e.state ?? {}
-      current ? setRoute(current) : setRoute({ ...route, match: false })
-    })
-    window.addEventListener('pushstate', () => {
-      const { previous } = e.state ?? {}
-      previous ? setRoute(previous) : setRoute({ ...route, match: false })
-    })
-  }, [])
+    route()
+  }, [state.routes, authenticated])
 
   return (
     <RouterContext.Provider
@@ -61,7 +80,10 @@ export const Router = ({
         authenticated,
         authRedirect,
         notFoundRedirect,
-        route,
+        subscribe,
+        unsubscribe,
+        set,
+        get,
         navigate
       }}
     >
@@ -70,73 +92,33 @@ export const Router = ({
   )
 }
 
-export const Route = ({
-  auth = false,
-  notFound = false,
-  path,
-  component: Component
-}) => {
-  const { authenticated, authRedirect, notFoundRedirect, route, navigate } =
-    useRouter()
-  const currentPathname = route.pathname
-  const currentSearch = route.search
-  const pattern = new URLPattern({ pathname: path })
-  const match = pattern.test({ pathname: currentPathname })
+export const useRouter = () => {
+  const {
+    authenticated,
+    authRedirect,
+    notFoundRedirect,
+    subscribe,
+    unsubscribe,
+    set,
+    get,
+
+    navigate
+  } = useContext(RouterContext)
+  const [state, setState] = useState(get())
+
+  const globalSetState = globalState => setState(globalState)
 
   useEffect(() => {
-    if (auth && !authenticated && match && currentPathname !== authRedirect) {
-      navigate(null, { pathname: authRedirect, search: '' })
-    }
-    if (notFound && !route.match) {
-      navigate(null, { pathname: notFoundRedirect, search: '' })
-    }
-  }, [route])
+    const id = subscribe(globalSetState)
+    return () => unsubscribe(id)
+  }, [])
 
-  if (notFound) return null
-  if (match) {
-    const pathnameParams = pattern.exec({ pathname: currentPathname }).pathname
-      .groups
-    const searchParams = Object.fromEntries(
-      new URLSearchParams(currentSearch).entries()
-    )
-    route.pathname = currentPathname
-    route.search = currentSearch
-    route.match = match
-    route.params = {
-      ...pathnameParams,
-      ...searchParams
-    }
-
-    return <Component route={route} />
+  return {
+    authenticated,
+    authRedirect,
+    notFoundRedirect,
+    state,
+    set,
+    navigate
   }
-
-  return null
-}
-
-export const Link = ({
-  children,
-  ext = false,
-  url = '/',
-  target = '_self',
-  style = ''
-}) => {
-  const { route, navigate } = useRouter()
-  const [pathname, search] = url.split('?')
-  const active = route.pathname.includes(url)
-  return (
-    <a
-      href={url}
-      target={target}
-      className={style}
-      data-active={active}
-      onClick={e => {
-        if (!ext) {
-          e.preventDefault()
-          navigate(null, { pathname, search: search ? `?${search}` : '' })
-        }
-      }}
-    >
-      {children}
-    </a>
-  )
 }
