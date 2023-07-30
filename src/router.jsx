@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid'
 
 const RouterContext = createContext({})
 
-export const Router = ({
+const Router = ({
   children,
   authenticated = false,
   authRedirect = '/login',
@@ -99,7 +99,7 @@ export const Router = ({
   )
 }
 
-export const useRouter = () => {
+const useRouter = () => {
   const { subscribe, unsubscribe, set, get, navigate, back } =
     useContext(RouterContext)
   const [state, setState] = useState(get())
@@ -116,3 +116,5 @@ export const useRouter = () => {
     back
   }
 }
+
+export { Router, useRouter }
